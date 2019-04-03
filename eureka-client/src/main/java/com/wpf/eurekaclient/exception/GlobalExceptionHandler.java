@@ -24,7 +24,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(Exception.class)
-  public ResultInfo globalException(Exception e) {
+  public ResultInfo exception(Exception e) {
     return new ResultInfo(StatusEnum.EXCEPTION, e.toString());
+  }
+
+  @ExceptionHandler(GlobalException.class)
+  public ResultInfo globalException(GlobalException e) {
+    return new ResultInfo(StatusEnum.EXCEPTION, e.getResult());
   }
 }

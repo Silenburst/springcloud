@@ -1,85 +1,97 @@
 package com.wpf.eurekaclient.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
-    private Integer id;
+/**
+ * @ClassName: User
+ * @Description: TODO(这里用一句话描述这个类的作用)
+ * @author pengfei.wang
+ * @date 2019年4月3日 下午5:06:48
+ */
+public class User implements Serializable {
+  /**
+   * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
+   */
+  private static final long serialVersionUID = 1L;
 
-    private Integer openId;
+  private Integer id;
 
-    private String login;
+  private Integer openId;
 
-    private String name;
+  private String login;
 
-    private Integer sex;
+  private String name;
 
-    private Integer status;
+  private Integer sex;
 
-    private Date createTime;
+  private Integer status;
 
-    private Date updateTime;
+  private Date createTime;
 
-    public Integer getId() {
-        return id;
-    }
+  private Date updateTime;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public Integer getOpenId() {
-        return openId;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public void setOpenId(Integer openId) {
-        this.openId = openId;
-    }
+  public Integer getOpenId() {
+    return openId;
+  }
 
-    public String getLogin() {
-        return login;
-    }
+  public void setOpenId(Integer openId) {
+    this.openId = openId;
+  }
 
-    public void setLogin(String login) {
-        this.login = login == null ? null : login.trim();
-    }
+  public String getLogin() {
+    return login;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setLogin(String login) {
+    this.login = login == null ? null : login.trim();
+  }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Integer getSex() {
-        return sex;
-    }
+  public void setName(String name) {
+    this.name = name == null ? null : name.trim();
+  }
 
-    public void setSex(Integer sex) {
-        this.sex = sex;
-    }
+  public Integer getSex() {
+    return sex;
+  }
 
-    public Integer getStatus() {
-        return status;
-    }
+  public void setSex(Integer sex) {
+    this.sex = sex;
+  }
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+  public Integer getStatus() {
+    return status;
+  }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+  public void setStatus(Integer status) {
+    this.status = status;
+  }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+  public Date getCreateTime() {
+    return createTime;
+  }
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
+  }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
+  public Date getUpdateTime() {
+    return updateTime;
+  }
+
+  public void setUpdateTime(Date updateTime) {
+    this.updateTime = updateTime;
+  }
 }

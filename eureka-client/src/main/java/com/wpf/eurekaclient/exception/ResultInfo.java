@@ -37,6 +37,11 @@ public class ResultInfo {
     this.data = data;
   }
 
+  public ResultInfo(StatusEnum statu) {
+    this.code = statu.getCode();
+    this.desc = statu.getDesc();
+  }
+
   /**
    * @return code
    */
