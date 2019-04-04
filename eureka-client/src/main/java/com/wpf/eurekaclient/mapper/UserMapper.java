@@ -16,4 +16,8 @@ public interface UserMapper {
   int updateByPrimaryKey(User record);
 
   User login(String login, String password);
+
+  User getUserByOpenId(String openId);
+
+  User verifyUser(String openId, int userId, int appId);
 }

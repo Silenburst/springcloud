@@ -22,8 +22,12 @@ public class GlobalException extends Exception {
   private static final long serialVersionUID = 1L;
   private ResultInfo result;
 
-  public GlobalException(ResultInfo result) {
-    this.result = result;
+  public GlobalException(StatusEnum statu) {
+    this.result = new ResultInfo(statu);
+  }
+
+  public GlobalException(StatusEnum statu, Object data) {
+    this.result = new ResultInfo(statu, data);
   }
 
   /**

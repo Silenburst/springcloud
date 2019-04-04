@@ -16,12 +16,27 @@ package com.wpf.eurekaclient.token;
  */
 public class Token {
 
-  private int version = 0;
-  private long expire = 0;
   private int appId = 0;
   private int userId = 0;
   private int userTypeId = 0;
-  private int openId = 0;
+  private String openId = "0";
+  private String sessionKey = "0";
+  private int version = 0;
+  private long expire = 0;
+
+  public Token(int appId, int userId, int userTypeId, String openId, String sessionKey, int version, long expire) {
+    this.appId = appId;
+    this.userId = userId;
+    this.userTypeId = userTypeId;
+    this.openId = openId;
+    this.sessionKey = sessionKey;
+    this.version = version;
+    this.expire = expire;
+  }
+
+  public Token() {
+
+  }
 
   /**
    * @return version
@@ -96,14 +111,29 @@ public class Token {
   /**
    * @return openId
    */
-  public int getOpenId() {
+  public String getOpenId() {
     return openId;
   }
 
   /**
    * @param openId the openId to set
    */
-  public void setOpenId(int openId) {
+  public void setOpenId(String openId) {
     this.openId = openId;
   }
+
+  /**
+   * @return sessionKey
+   */
+  public String getSessionKey() {
+    return sessionKey;
+  }
+
+  /**
+   * @param sessionKey the sessionKey to set
+   */
+  public void setSessionKey(String sessionKey) {
+    this.sessionKey = sessionKey;
+  }
+
 }

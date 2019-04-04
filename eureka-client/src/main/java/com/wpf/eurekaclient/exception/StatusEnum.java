@@ -19,7 +19,11 @@ public enum StatusEnum {
   EXCEPTION(-1, "系统异常"),
   SUCCESS(0, "成功"),
   LOGINSUCCESS(1, "登录成功"), 
-  LOGINFAIL(2, "登录失败");
+  LOGINFAIL(2, "登录失败"),
+  HTTPEXCEPTION(3, "http请求异常"),
+  UNREGISTERED(4,"未注册"),
+  UNLOGIN(5,"未登录"),
+  TOKENISNOTVALID(6,"token已经失效");
 
   private int code;
   private String desc;

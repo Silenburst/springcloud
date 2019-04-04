@@ -31,4 +31,12 @@ public class UserService {
     return userMapper.login(login, password);
   }
 
+  public User getUserByOpenId(String openId) {
+    return userMapper.getUserByOpenId(openId);
+  }
+
+  public User verifyUser(String openId, int userId, int appId) {
+    return userMapper.verifyUser(openId, userId, appId);
+  }
+
 }
