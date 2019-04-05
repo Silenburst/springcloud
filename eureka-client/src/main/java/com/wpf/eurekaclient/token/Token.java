@@ -16,13 +16,13 @@ package com.wpf.eurekaclient.token;
  */
 public class Token {
 
-  private String appId = "0";
-  private int userId = 0;
-  private int userType = 0;
-  private String openId = "0";
-  private String sessionKey = "0";
-  private int version = 0;
-  private long expire = 0;
+  private String appId;
+  private int userId;
+  private int userType;
+  private String openId;
+  private String sessionKey;
+  private int version;
+  private long expire;
 
   public Token(String appId, int userId, int userType, String openId, String sessionKey, int version, long expire) {
     this.appId = appId;
