@@ -19,5 +19,7 @@ public interface UserMapper {
 
   User getUserByOpenId(String openId);
 
-  User verifyUser(String openId, int userId, int appId);
+  User verifyUser(String openId, int userId, String appId);
+
+  User getUserByLogin(String login, String appId);
 }

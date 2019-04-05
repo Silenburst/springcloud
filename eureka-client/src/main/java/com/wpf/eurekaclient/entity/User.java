@@ -17,9 +17,15 @@ public class User implements Serializable {
 
   private Integer id;
 
-  private Integer openId;
+  private String openId;
 
   private String login;
+
+  private String password;
+
+  private int userType;
+
+  private String appId;
 
   private String name;
 
@@ -39,11 +45,11 @@ public class User implements Serializable {
     this.id = id;
   }
 
-  public Integer getOpenId() {
+  public String getOpenId() {
     return openId;
   }
 
-  public void setOpenId(Integer openId) {
+  public void setOpenId(String openId) {
     this.openId = openId;
   }
 
@@ -52,7 +58,31 @@ public class User implements Serializable {
   }
 
   public void setLogin(String login) {
-    this.login = login == null ? null : login.trim();
+    this.login = login;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public int getUserType() {
+    return userType;
+  }
+
+  public void setUserType(int userType) {
+    this.userType = userType;
+  }
+
+  public String getAppId() {
+    return appId;
+  }
+
+  public void setAppId(String appId) {
+    this.appId = appId;
   }
 
   public String getName() {
@@ -60,7 +90,7 @@ public class User implements Serializable {
   }
 
   public void setName(String name) {
-    this.name = name == null ? null : name.trim();
+    this.name = name;
   }
 
   public Integer getSex() {
@@ -94,4 +124,5 @@ public class User implements Serializable {
   public void setUpdateTime(Date updateTime) {
     this.updateTime = updateTime;
   }
+
 }

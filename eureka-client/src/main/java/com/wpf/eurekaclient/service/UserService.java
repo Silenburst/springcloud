@@ -31,12 +31,19 @@ public class UserService {
     return userMapper.login(login, password);
   }
 
+  public int register(User user) {
+    return userMapper.insertSelective(user);
+  }
+
   public User getUserByOpenId(String openId) {
     return userMapper.getUserByOpenId(openId);
   }
 
-  public User verifyUser(String openId, int userId, int appId) {
+  public User verifyUser(String openId, int userId, String appId) {
     return userMapper.verifyUser(openId, userId, appId);
   }
 
+  public User getUserByLoginAndApp(String login,String appId) {
+    return userMapper.getUserByLogin(login,appId);
+  }
 }

@@ -23,7 +23,12 @@ public enum StatusEnum {
   HTTPEXCEPTION(3, "http请求异常"),
   UNREGISTERED(4,"未注册"),
   UNLOGIN(5,"未登录"),
-  TOKENISNOTVALID(6,"token已经失效");
+  TOKENISNOTVALID(6,"token已经失效"),
+  LOGINEXISTS(7,"用户名已经存在"),
+  WEIXINHTTPFAIL(8,"请求微信接口失败"),
+  LOGINPASSWORDISBLANK(9,"用户名密码不能为空"),
+  REGISTERFAIL(10,"注册失败"),
+  REGISTERSUCCESS(11,"注册成功");
 
   private int code;
   private String desc;

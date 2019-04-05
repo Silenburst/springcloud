@@ -9,6 +9,7 @@
 package com.wpf.eurekaclient.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
@@ -19,13 +20,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.wpf.eurekaclient.config.WeixinConfig;
+import com.wpf.eurekaclient.constant.Constant;
 import com.wpf.eurekaclient.entity.User;
+import com.wpf.eurekaclient.enums.UserTypeEnum;
 import com.wpf.eurekaclient.exception.GlobalException;
 import com.wpf.eurekaclient.exception.ResultInfo;
 import com.wpf.eurekaclient.exception.StatusEnum;
 import com.wpf.eurekaclient.service.UserService;
-import com.wpf.eurekaclient.token.Token;
+import com.wpf.eurekaclient.token.TokenFactory;
 import com.wpf.eurekaclient.utils.HttpUtil;
 
 /**
@@ -40,9 +42,6 @@ public class LoginController extends ControllerBase {
   @Autowired
   private UserService userService;
 
-  @Autowired
-  private WeixinConfig weixinConfig;
-
   @RequestMapping(value = "/login", method = RequestMethod.POST)
   public ResultInfo login(@RequestBody JSONObject param) throws GlobalException {
     String tokenStr = param.getString("token");
@@ -55,55 +54,90 @@ public class LoginController extends ControllerBase {
       }
       throw new GlobalException(StatusEnum.TOKENISNOTVALID);
     } else {
-      try {
-        password = DigestUtils.md5Hex(password.getBytes("utf-8"));
-      } catch (UnsupportedEncodingException e) {
-        e.printStackTrace();
-        throw new GlobalException(StatusEnum.EXCEPTION, "MD5加密失败");
+      if (StringUtils.isNotBlank(login) && StringUtils.isNotBlank(password)) {
+        try {
+          password = DigestUtils.md5Hex(password.getBytes("utf-8"));
+        } catch (UnsupportedEncodingException e) {
+          e.printStackTrace();
+          throw new GlobalException(StatusEnum.EXCEPTION, "加密失败");
+        }
+        User user = userService.login(login, password);
+        String openId = null;
+        String sessionKey = null;
+        String url = String.format(Constant.CODE_URL, Constant.APP_ID, Constant.APP_SECRET, code);
+        String result = HttpUtil.doGet(url, null);
+        if (JSONObject.isValidObject(result)) {
+          JSONObject obj = JSONObject.parseObject(result);
+          openId = obj.getString("openid");
+          sessionKey = obj.getString("session_key");
+        }
+        if (StringUtils.isBlank(openId) || StringUtils.isBlank(sessionKey)) {
+          throw new GlobalException(StatusEnum.WEIXINHTTPFAIL);
+        }
+        if (null != user) {
+          return new ResultInfo(StatusEnum.LOGINSUCCESS,
+              TokenFactory.generateTokenStr(TokenFactory.generateToken(user, sessionKey, Constant.VERSION_1)));
+        } else {
+          user = userService.getUserByOpenId(openId);
+          if (null == user) {
+            throw new GlobalException(StatusEnum.UNREGISTERED);
+          }
+          throw new GlobalException(StatusEnum.LOGINFAIL);
+        }
       }
-      User user = userService.login(login, password);
-      if (null != user) {
-        Token token = new Token();
-      }
-
-      throw new GlobalException(StatusEnum.LOGINFAIL);
+      throw new GlobalException(StatusEnum.LOGINPASSWORDISBLANK);
     }
+
   }
 
   @RequestMapping(value = "/register", method = RequestMethod.POST)
-  public void register(@RequestBody JSONObject param) throws GlobalException {
+  public ResultInfo register(@RequestBody JSONObject param) throws GlobalException {
     String login = param.getString("login");
     String password = param.getString("password");
     String password2 = param.getString("password2");
     String code = param.getString("code");
-    String url = String.format(weixinConfig.getOpenIdByCodeUrl(), weixinConfig.getAppId(), weixinConfig.getAppSecret(), code);
-    String result = HttpUtil.doGet(url, null);
-    if (JSONObject.isValidObject(result)) {
-      JSONObject obj = JSONObject.parseObject(result);
-      String openId = obj.getString("openid");
-      String sessionKey = obj.getString("session_key");
-      if (StringUtils.isNotBlank(openId)) {
-        User user = userService.getUserByOpenId(openId);
-        if (null == user) {
-          throw new GlobalException(StatusEnum.UNREGISTERED);
-        }
 
+    if (StringUtils.isNotBlank(login) && StringUtils.isNotBlank(password) && StringUtils.isNotBlank(password2)) {
+      if (null != userService.getUserByLoginAndApp(login, Constant.APP_ID)) {
+        throw new GlobalException(StatusEnum.LOGINEXISTS);
       }
+      if (password.equals(password2)) {
+        try {
+          password = DigestUtils.md5Hex(password.getBytes("utf-8"));
+        } catch (UnsupportedEncodingException e) {
+          e.printStackTrace();
+          throw new GlobalException(StatusEnum.EXCEPTION, "加密失败");
+        }
+        String openId = null;
+        String sessionKey = null;
+        String url = String.format(Constant.CODE_URL, Constant.APP_ID, Constant.APP_SECRET, code);
+        String result = HttpUtil.doGet(url, null);
+        if (JSONObject.isValidObject(result)) {
+          JSONObject obj = JSONObject.parseObject(result);
+          openId = obj.getString("openid");
+          sessionKey = obj.getString("session_key");
+        }
+        if (StringUtils.isBlank(openId) || StringUtils.isBlank(sessionKey)) {
+          throw new GlobalException(StatusEnum.WEIXINHTTPFAIL);
+        }
+        User user = new User();
+        user.setOpenId(openId);
+        user.setLogin(login);
+        user.setPassword(password);
+        user.setUserType(UserTypeEnum.Normal.getId());
+        user.setAppId(Constant.APP_ID);
+        user.setCreateTime(new Date());
+        user.setUpdateTime(new Date());
 
+        int id = userService.register(user);
+        if (id != 0) {
+          user.setId(id);
+          return new ResultInfo(StatusEnum.REGISTERSUCCESS,
+              TokenFactory.generateTokenStr(TokenFactory.generateToken(user, sessionKey, Constant.VERSION_1)));
+        }
+        throw new GlobalException(StatusEnum.REGISTERFAIL);
+      }
     }
-    if (StringUtils.isBlank(login) || StringUtils.isBlank(password)) {
-      throw new GlobalException(StatusEnum.LOGINFAIL);
-    }
-    String md5Pass = "";
-    try {
-      md5Pass = DigestUtils.md5Hex(password.getBytes("utf-8"));
-    } catch (UnsupportedEncodingException e) {
-      throw new GlobalException(StatusEnum.EXCEPTION, "MD5加密失败");
-    }
-    User user = userService.login(login, md5Pass);
-    if (null == user) {
-      throw new GlobalException(StatusEnum.LOGINFAIL);
-    }
+    throw new GlobalException(StatusEnum.LOGINPASSWORDISBLANK);
   }
-
 }
