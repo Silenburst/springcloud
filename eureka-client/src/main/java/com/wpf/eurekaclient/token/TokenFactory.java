@@ -8,9 +8,13 @@
  */
 package com.wpf.eurekaclient.token;
 
+import java.util.Date;
+
 import org.apache.commons.lang.StringUtils;
 
+import com.wpf.eurekaclient.entity.User;
 import com.wpf.eurekaclient.utils.AesUtil;
+import com.wpf.eurekaclient.utils.DateUtil;
 
 /**
  * @ClassName: TokenFactory
@@ -29,11 +33,10 @@ public class TokenFactory {
   }
 
   public static Token strToToken(String tokenStr) {
-    if (!StringUtils.isBlank(tokenStr)) {
+    if (StringUtils.isNotBlank(tokenStr)) {
       String[] arr = tokenStr.split("&%");
       if (arr.length == 7) {
-        return new Token(Integer.valueOf(arr[0]), Integer.valueOf(arr[1]), Integer.valueOf(arr[2]), arr[3], arr[4], Integer.valueOf(arr[5]),
-            Long.valueOf(arr[6]));
+        return new Token(arr[0], Integer.valueOf(arr[1]), Integer.valueOf(arr[2]), arr[3], arr[4], Integer.valueOf(arr[5]), Long.valueOf(arr[6]));
       }
     }
     return null;
@@ -44,13 +47,28 @@ public class TokenFactory {
     if (null != token) {
       sb.append(token.getAppId()).append("&%");
       sb.append(token.getUserId()).append("&%");
-      sb.append(token.getUserTypeId()).append("&%");
+      sb.append(token.getUserType()).append("&%");
       sb.append(token.getOpenId()).append("&%");
       sb.append(token.getSessionKey()).append("&%");
       sb.append(token.getVersion()).append("&%");
       sb.append(token.getExpire());
     }
     return sb.toString();
+  }
+
+  public static Token generateToken(User user, String sessionKey, int version) {
+    if (null != user) {
+      Token token = new Token();
+      token.setAppId(user.getAppId());
+      token.setOpenId(user.getOpenId());
+      token.setUserId(user.getId());
+      token.setUserType(user.getUserType());
+      token.setSessionKey(sessionKey);
+      token.setVersion(version);
+      token.setExpire(DateUtil.getNextDate(new Date()).getTime());
+      return token;
+    }
+    return null;
   }
 
 }

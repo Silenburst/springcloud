@@ -16,18 +16,18 @@ package com.wpf.eurekaclient.token;
  */
 public class Token {
 
-  private int appId = 0;
+  private String appId = "0";
   private int userId = 0;
-  private int userTypeId = 0;
+  private int userType = 0;
   private String openId = "0";
   private String sessionKey = "0";
   private int version = 0;
   private long expire = 0;
 
-  public Token(int appId, int userId, int userTypeId, String openId, String sessionKey, int version, long expire) {
+  public Token(String appId, int userId, int userType, String openId, String sessionKey, int version, long expire) {
     this.appId = appId;
     this.userId = userId;
-    this.userTypeId = userTypeId;
+    this.userType = userType;
     this.openId = openId;
     this.sessionKey = sessionKey;
     this.version = version;
@@ -38,102 +38,60 @@ public class Token {
 
   }
 
-  /**
-   * @return version
-   */
-  public int getVersion() {
-    return version;
-  }
-
-  /**
-   * @param version the version to set
-   */
-  public void setVersion(int version) {
-    this.version = version;
-  }
-
-  /**
-   * @return expire
-   */
-  public long getExpire() {
-    return expire;
-  }
-
-  /**
-   * @param expire the expire to set
-   */
-  public void setExpire(long expire) {
-    this.expire = expire;
-  }
-
-  /**
-   * @return appId
-   */
-  public int getAppId() {
+  public String getAppId() {
     return appId;
   }
 
-  /**
-   * @param appId the appId to set
-   */
-  public void setAppId(int appId) {
+  public void setAppId(String appId) {
     this.appId = appId;
   }
 
-  /**
-   * @return userId
-   */
   public int getUserId() {
     return userId;
   }
 
-  /**
-   * @param userId the userId to set
-   */
   public void setUserId(int userId) {
     this.userId = userId;
   }
 
-  /**
-   * @return userTypeId
-   */
-  public int getUserTypeId() {
-    return userTypeId;
+  public int getUserType() {
+    return userType;
   }
 
-  /**
-   * @param userTypeId the userTypeId to set
-   */
-  public void setUserTypeId(int userTypeId) {
-    this.userTypeId = userTypeId;
+  public void setUserType(int userType) {
+    this.userType = userType;
   }
 
-  /**
-   * @return openId
-   */
   public String getOpenId() {
     return openId;
   }
 
-  /**
-   * @param openId the openId to set
-   */
   public void setOpenId(String openId) {
     this.openId = openId;
   }
 
-  /**
-   * @return sessionKey
-   */
   public String getSessionKey() {
     return sessionKey;
   }
 
-  /**
-   * @param sessionKey the sessionKey to set
-   */
   public void setSessionKey(String sessionKey) {
     this.sessionKey = sessionKey;
+  }
+
+  public int getVersion() {
+    return version;
+  }
+
+  public void setVersion(int version) {
+    this.version = version;
+  }
+
+  public long getExpire() {
+    return expire;
+  }
+
+  public void setExpire(long expire) {
+    this.expire = expire;
   }
 
 }
